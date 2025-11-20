@@ -1,0 +1,28 @@
+class Dish:
+  def __init__(self, name, price, category):
+    self.name = name
+    self.price = float(price)
+    self.category = category
+
+  def __str__(self):
+    return f"{self.category}, {self.price}"
+
+dish_1 = Dish("Spaghetti", 12.25, "Main Course")
+dish_1.price
+class Order:
+  order_counter = 0
+
+  def __init__(self, customer, status = "Pending"):
+    Order.order_counter += 1
+    self.order_id = Order.order_counter
+    self.customer = customer
+    self.ordered_dishes = []
+    self.status = status
+
+  def add_dish(self, dish):
+    self.ordered_dishes.append(dish)
+    print(dish)
+
+  def calculate_total(self):
+    self.
+
