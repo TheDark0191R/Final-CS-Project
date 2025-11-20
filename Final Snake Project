@@ -1,0 +1,181 @@
+#Snake Game project using Pygame
+#First step is to import resources and libraries from Pygame to develop code and sprites
+
+import pygame
+import time
+import random
+
+snake_speed = 10
+
+#Adjust size of the window (resolution) for the game
+
+window_x = 1920
+window_y = 1080
+
+#Colors for the sprites (Color code)
+black = pygame.Color(0, 0, 0)
+white = pygame.Color(255, 255, 255)
+red = pygame.Color(255, 0, 0)
+green = pygame.Color(0, 255, 0)
+blue = pygame.Color(0, 0, 255)
+
+#Starting pygame
+pygame.init()
+
+#Starting the game window
+#The display shows text in the game
+pygame.display.set_caption("Snake by TheDark0191R")
+#Set mode works for adjusting the window to the desired resolution
+game_window = pygame.display.set_mode((window_x, window_y))
+
+#FPS controller (frames per second)
+fps = pygame.time.Clock()
+#Note: FPS are shown to measure how fast the game can be processed
+
+#First position of snake
+snake_position = [100, 50]
+#This is a default position
+
+#Programming the body so it can move along the position and the head
+snake_body = [  [100, 50],
+                [90, 50],
+                [80, 50],
+                [70, 50]
+            ]
+#Random fruit position so it can appear anytime
+fruit_position = [random.randrange(1, (window_x//10)) * 10,
+                  random.randrange(1, (window_y//10)) * 10]
+fruit_spawn = True
+
+#The snake default movement will be right
+direction = 'Right'
+change_to = direction
+
+#Initial score for the player
+score = 0
+
+#Now a function is created so the score attributes can be modified
+#As this is my first time using pygame, I reviewed the display code from another creator
+def show_score(choice, color, font, size):
+
+    #Using a font for the player's score
+    score_font = pygame.font.SysFont(font, size)
+
+    #The display will be shown at the game's surface
+    score_surface = score_font.render("Score : " + str(score), True, color)
+
+    #This will change the score display to a rectangular form
+    score_rect = score_surface.get_rect()
+
+    #Displaying the text
+    game_window.blit(score_surface, score_rect)
+#The next step is to program the necessary code when the snake crashes
+#Basically a game over code
+
+#A function for the necessary attributes to end the game
+def game_over():
+
+    #Font attribute for the system
+    my_font = pygame.font.SysFont("Arial", 50)
+
+    #Score will be presented with string of number + color
+    game_over_surface = my_font.render("Your Score is : " + str(score), True, red)
+
+    #Again, another rectangular display for the game over text
+    game_over_rect = game_over_surface.get_rect()
+
+    #Position of game over at the middle of the page
+    game_over_rect.midtop = (window_x/2, window_y/4)
+
+    #Final Game Over display
+    game_window.blit(game_over_surface, game_over_rect)
+    pygame.display.flip()
+
+    #After 2 seconds, the program will stop
+    time.sleep(2)
+
+    #If user quits, the game will shut down
+    pygame.quit()
+
+    #To end the game, a quit parameter is used
+    quit()
+#Main game is finished, now it is time to program the keys movement
+
+#Loop for the main function
+while True:
+
+    #Programming the keys
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                change_to = "Up"
+            if event.key == pygame.K_DOWN:
+                change_to = "Down"
+            if event.key == pygame.K_LEFT:
+                change_to = "Left"
+            if event.key == pygame.K_RIGHT:
+                change_to = "Right"
+
+    #Two attributes, so the snake does not move in the same direction it came
+    #from
+    if change_to == "Up" and direction != "Down":
+        direction = "Up"
+    if change_to == "Down" and direction != "Up":
+        direction = "Down"
+    if change_to == "Left" and direction != "Right":
+        direction = "Left"
+    if change_to == "Right" and direction != "Left":
+        direction = "Right"
+
+    #Moving the snake (Number between 1 and 0 so it can start at the origin
+    #point)
+    if direction == "Up":
+        snake_position[1] -= 10
+    if direction == "Down":
+        snake_position[1] += 10
+    if direction == "Left":
+        snake_position[0] -= 10
+    if direction == "Right":
+        snake_position[0] += 10
+
+    #For the snake growing process, the length will be increased
+    #by 10 if it collides with the fruit
+    snake_body.insert(0, list(snake_position))
+    if snake_position[0] == fruit_position[0] and snake_position[1] == fruit_position[1]:
+        score += 10
+        fruit_spawn = False
+    else:
+        snake_body.pop()
+
+    if not fruit_spawn:
+        fruit_position = [random.randrange(1, (window_x//10)) * 10,
+                          random.randrange(1, (window_y//10)) * 10]
+    #Game fills with black to fill the space
+    #that the fruit left
+    fruit_spawn = True
+    game_window.fill(black)
+
+    for pos in snake_body:
+        pygame.draw.rect(game_window, green, pygame.Rect(
+          pos[0], pos[1], 10, 10))
+
+    pygame.draw.rect(game_window, white, pygame.Rect(
+      fruit_position[0], fruit_position[1], 10, 10))
+
+    #Conditions for when the snake touches the walls
+    if snake_position[0] < 0 or snake_position[0] > window_x-10:
+        game_over()
+    if snake_position[1] < 0 or snake_position[1] > window_y-10:
+        game_over()
+
+    #Conditions as well but with its own body
+    for block in snake_body[1:]:
+        if snake_position[0] == block[0] and snake_position[1] == block[1]:
+            game_over()
+
+    #Displaying score and FPS
+    show_score(1, white, "times new roman", 20)
+
+    pygame.display.update()
+
+    fps.tick(snake_speed)
