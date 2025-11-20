@@ -1,0 +1,72 @@
+# User Login
+# Declare Variables
+username = "Juan2006"
+password = 12345
+attempts = 0
+balance = float("100000")
+
+# Create Login System, while loop so it can be accessed at any moment
+
+while attempts <= 3:
+  username_user = str(input(("Enter your username ")))
+  password_user = int(input(("Enter your password ")))
+
+  if username_user == username and password_user == password:
+    print("Login Successful")
+    break
+
+  else:
+      attempts += 1
+      print("Please try again")
+
+#Create a condition for more than 3 attempts
+if attempts > 3:
+  print("Access Denied, contact the bank")
+
+else:
+  while True:
+    print("--Main Menu--")
+    print("1. Check Balance")
+    print("2. Deposit Money")
+    print("3. Withdraw Money")
+    print("4. Exit the Menu")
+
+    choice = input("Select your option ")
+
+  # Create system for checking balance
+
+    if choice == "1":
+     print(balance)
+
+  # Create system for deposit money
+
+    elif choice == "2":
+     deposit = int(input("Enter amount you want to deposit "))
+
+     if deposit > 0:
+      balance += deposit
+      print("Your new balance is", balance)
+     else:
+      print("Deposit needs to be greater than 0")
+
+  #Create system for withdrawal money
+
+    elif choice == "3":
+      amount_withdraw = float(input('Enter amount to withdraw:'))
+
+      if amount_withdraw <= balance:
+        balance -= amount_withdraw
+        print("Your new balance is", balance)
+      elif amount_withdraw > balance:
+       print("Funding is not sufficient. You can withdraw up to this amount", balance)
+
+    elif choice == "4":
+     print("Thanks for using the system. Hope to see you")
+     break
+
+
+
+
+
+
+
