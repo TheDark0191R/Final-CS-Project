@@ -1,0 +1,22 @@
+#Step  1: Creating the Library
+
+movie_library = []
+
+def add_movie():
+  movie_name = str(input("Enter the name of the movie "))
+  movie_year = int(input("Enter the year of the movie "))
+  movie_genre = input('Enter genre: ')
+
+  return {
+      'title': movie_name,
+      'genre': movie_genre,
+      'year': movie_year
+  }
+
+while True:
+  add = input('Do you want to add a movie? ')
+  if add != 'yes':
+    break
+
+  movie = add_movie()
+  movie_library.append(movie)
